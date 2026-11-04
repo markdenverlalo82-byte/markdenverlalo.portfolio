@@ -69,6 +69,7 @@ function photographyApp() {
             this.$watch('activeTab', () => setTimeout(() => lucide.createIcons(), 50));
             this.$watch('selectedAlbum', () => setTimeout(() => lucide.createIcons(), 50));
             this.$watch('isAdminAuthenticated', () => setTimeout(() => lucide.createIcons(), 50));
+            this.$watch('albumForm.photos', () => setTimeout(() => lucide.createIcons(), 50));
         },
 
         get visibleAlbums() {
@@ -127,6 +128,13 @@ function photographyApp() {
             this.albumForm.photos = this.albumForm.photos.filter(p => p.id !== id);
         },
 
+        movePhoto(index, direction) {
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= this.albumForm.photos.length) return;
+            const item = this.albumForm.photos.splice(index, 1)[0];
+            this.albumForm.photos.splice(newIndex, 0, item);
+        },
+
         setAsCover(url) {
             const idx = this.albumForm.photos.findIndex(p => p.url === url);
             if (idx > 0) {
@@ -140,72 +148,4 @@ function photographyApp() {
             const cover = this.albumForm.photos.length > 0 ? this.albumForm.photos[0].url : 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1600';
 
             const albumObj = {
-                id: this.editingAlbumId || 'album-' + Date.now(),
-                title: this.albumForm.title,
-                subtitle: this.albumForm.subtitle,
-                category: this.albumForm.category,
-                location: this.albumForm.location,
-                date: this.albumForm.date,
-                description: this.albumForm.description,
-                coverUrl: cover,
-                visible: true,
-                featured: this.albumForm.featured,
-                photos: [...this.albumForm.photos]
-            };
-
-            if (this.editingAlbumId) {
-                this.albums = this.albums.map(a => a.id === this.editingAlbumId ? albumObj : a);
-                this.editingAlbumId = null;
-            } else {
-                this.albums.unshift(albumObj);
-            }
-            this.resetAlbumForm();
-        },
-
-        resetAlbumForm() {
-            this.editingAlbumId = null;
-            this.albumForm = { title: '', subtitle: '', category: 'Weddings', location: '', date: '', description: '', featured: false, photos: [] };
-        },
-
-        editAlbum(album) {
-            this.editingAlbumId = album.id;
-            this.albumForm = {
-                title: album.title,
-                subtitle: album.subtitle || '',
-                category: album.category,
-                location: album.location || '',
-                date: album.date || '',
-                description: album.description || '',
-                featured: album.featured || false,
-                photos: [...album.photos]
-            };
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        },
-
-        toggleVisibility(id) {
-            this.albums = this.albums.map(a => a.id === id ? { ...a, visible: !a.visible } : a);
-        },
-
-        deleteAlbum(id) {
-            if (confirm('Are you sure you want to delete this album?')) {
-                this.albums = this.albums.filter(a => a.id !== id);
-            }
-        },
-
-        openLightbox(idx) {
-            this.lightboxIndex = idx;
-        },
-
-        prevLightbox() {
-            if (this.lightboxIndex !== null && this.selectedAlbum) {
-                this.lightboxIndex = (this.lightboxIndex - 1 + this.selectedAlbum.photos.length) % this.selectedAlbum.photos.length;
-            }
-        },
-
-        nextLightbox() {
-            if (this.lightboxIndex !== null && this.selectedAlbum) {
-                this.lightboxIndex = (this.lightboxIndex + 1) % this.selectedAlbum.photos.length;
-            }
-        }
-    }
-}
+                id: this.editingAlbumId
