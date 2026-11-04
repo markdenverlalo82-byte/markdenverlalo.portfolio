@@ -37,13 +37,13 @@
 
             <!-- Navigation Links -->
             <nav class="flex items-center gap-6 md:gap-10 text-xs tracking-[0.2em] font-sans uppercase">
-                <button @click="selectedAlbum = null; activeTab = 'portfolio'" 
-                        :class="activeTab === 'portfolio' && !selectedAlbum ? 'text-[#9E8873] border-b border-[#9E8873] font-medium' : 'text-stone-500 hover:text-stone-900'" class="pb-1 transition-all">
-                    Albums
-                </button>
                 <button @click="selectedAlbum = null; activeTab = 'stories'" 
                         :class="activeTab === 'stories' ? 'text-[#9E8873] border-b border-[#9E8873] font-medium' : 'text-stone-500 hover:text-stone-900'" class="pb-1 transition-all">
                     Featured Stories
+                </button>
+                <button @click="selectedAlbum = null; activeTab = 'portfolio'" 
+                        :class="activeTab === 'portfolio' && !selectedAlbum ? 'text-[#9E8873] border-b border-[#9E8873] font-medium' : 'text-stone-500 hover:text-stone-900'" class="pb-1 transition-all">
+                    Albums
                 </button>
                 <button @click="selectedAlbum = null; activeTab = 'about'" 
                         :class="activeTab === 'about' ? 'text-[#9E8873] border-b border-[#9E8873] font-medium' : 'text-stone-500 hover:text-stone-900'" class="pb-1 transition-all">
