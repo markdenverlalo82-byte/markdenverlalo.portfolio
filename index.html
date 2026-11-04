@@ -26,7 +26,7 @@
     <!-- Header Nav -->
     <header class="sticky top-0 z-40 bg-[#FAFAFA]/90 backdrop-blur-md border-b border-stone-200/80 px-6 py-6 md:px-12 transition-all">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <button @click="selectedAlbum = null; activeTab = 'portfolio'" class="text-left group cursor-pointer">
+            <button @click="selectedAlbum = null; activeTab = 'stories'" class="text-left group cursor-pointer">
                 <h1 class="text-2xl md:text-3xl tracking-widest font-light uppercase text-stone-900 group-hover:text-[#9E8873] transition-colors">
                     MARK DENVER LALO
                 </h1>
@@ -72,7 +72,7 @@
             <div class="space-y-12 max-w-5xl mx-auto">
                 <button @click="selectedAlbum = null" class="flex items-center gap-2 text-xs font-sans tracking-[0.2em] uppercase text-stone-500 hover:text-[#9E8873] transition-colors cursor-pointer">
                     <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                    <span>Back to All Albums</span>
+                    <span>Back</span>
                 </button>
 
                 <div class="space-y-4 border-b border-stone-200 pb-10">
@@ -103,7 +103,36 @@
         <!-- MAIN TABS -->
         <template x-if="!selectedAlbum">
           <div>
-            <!-- TAB 1: PORTFOLIO GALLERY -->
+            <!-- TAB 1: FEATURED STORIES (Homepage Default) -->
+            <div x-show="activeTab === 'stories'" class="space-y-16 max-w-5xl mx-auto">
+                <div class="text-center space-y-3">
+                    <h2 class="text-3xl md:text-4xl font-serif tracking-wide text-stone-900 font-light">Featured Love Stories</h2>
+                    <p class="text-xs font-sans uppercase tracking-[0.2em] text-stone-500">Full photo essays and intimate celebrations</p>
+                </div>
+
+                <div class="space-y-20">
+                    <template x-for="(story, i) in albums.filter(a => a.featured && a.visible)">
+                        <div @click="selectedAlbum = story" class="cursor-pointer group grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white border border-stone-200/80 p-6 md:p-8 shadow-sm hover:shadow-md transition-all">
+                            <div :class="i % 2 === 1 ? 'lg:order-2 lg:col-span-7' : 'lg:order-1 lg:col-span-7'">
+                                <div class="aspect-[3/2] overflow-hidden bg-stone-100 border border-stone-200">
+                                    <img :src="story.coverUrl" :alt="story.title" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-700">
+                                </div>
+                            </div>
+                            <div :class="i % 2 === 1 ? 'lg:order-1 lg:col-span-5' : 'lg:order-2 lg:col-span-5'" class="space-y-4">
+                                <span class="text-xs font-sans tracking-[0.25em] text-[#9E8873] uppercase font-medium block" x-text="story.category + ' — Story ' + (i+1)"></span>
+                                <h3 class="text-2xl md:text-3xl font-serif text-stone-900 group-hover:text-[#9E8873] transition-colors" x-text="story.title"></h3>
+                                <p class="text-stone-600 font-serif text-sm leading-relaxed" x-text="story.description"></p>
+                                <div class="pt-2 flex items-center text-xs font-sans text-[#9E8873] font-medium gap-2">
+                                    <span x-text="'Explore Story (' + story.photos.length + ' Photographs)'"></span>
+                                    <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- TAB 2: PORTFOLIO GALLERY -->
             <div x-show="activeTab === 'portfolio'" class="space-y-12">
                 <div class="text-center max-w-2xl mx-auto space-y-4 py-4">
                     <p class="text-stone-600 italic font-serif text-lg md:text-xl leading-relaxed">
@@ -137,35 +166,6 @@
                                 </div>
                                 <h3 class="text-xl font-serif text-stone-900 tracking-wide font-light group-hover:text-[#9E8873] transition-colors" x-text="album.title"></h3>
                                 <p class="text-xs font-serif italic text-stone-500 mt-0.5" x-show="album.subtitle" x-text="album.subtitle"></p>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            </div>
-
-            <!-- TAB 2: FEATURED STORIES -->
-            <div x-show="activeTab === 'stories'" class="space-y-16 max-w-5xl mx-auto">
-                <div class="text-center space-y-3">
-                    <h2 class="text-3xl md:text-4xl font-serif tracking-wide text-stone-900 font-light">Featured Love Stories</h2>
-                    <p class="text-xs font-sans uppercase tracking-[0.2em] text-stone-500">Full photo essays and intimate celebrations</p>
-                </div>
-
-                <div class="space-y-20">
-                    <template x-for="(story, i) in albums.filter(a => a.featured && a.visible)">
-                        <div @click="selectedAlbum = story" class="cursor-pointer group grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white border border-stone-200/80 p-6 md:p-8 shadow-sm hover:shadow-md transition-all">
-                            <div :class="i % 2 === 1 ? 'lg:order-2 lg:col-span-7' : 'lg:order-1 lg:col-span-7'">
-                                <div class="aspect-[3/2] overflow-hidden bg-stone-100 border border-stone-200">
-                                    <img :src="story.coverUrl" :alt="story.title" class="w-full h-full object-cover group-hover:scale-105 transition-all duration-700">
-                                </div>
-                            </div>
-                            <div :class="i % 2 === 1 ? 'lg:order-1 lg:col-span-5' : 'lg:order-2 lg:col-span-5'" class="space-y-4">
-                                <span class="text-xs font-sans tracking-[0.25em] text-[#9E8873] uppercase font-medium block" x-text="story.category + ' — Story ' + (i+1)"></span>
-                                <h3 class="text-2xl md:text-3xl font-serif text-stone-900 group-hover:text-[#9E8873] transition-colors" x-text="story.title"></h3>
-                                <p class="text-stone-600 font-serif text-sm leading-relaxed" x-text="story.description"></p>
-                                <div class="pt-2 flex items-center text-xs font-sans text-[#9E8873] font-medium gap-2">
-                                    <span x-text="'Explore Story (' + story.photos.length + ' Photographs)'"></span>
-                                    <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-                                </div>
                             </div>
                         </div>
                     </template>
@@ -262,7 +262,7 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div class="space-y-2">
                                         <label class="text-[11px] uppercase tracking-wider text-stone-500 font-medium">Album Title *</label>
-                                        <input required type="text" x-model="albumForm.title" placeholder="e.g. Tuscany Sunset Elopement" class="w-full bg-stone-50 border border-stone-200 p-3 text-sm text-stone-900 focus:outline-none focus:border-[#9E8873]">
+                                        <input required type="text" x-model="albumForm.title" placeholder="e.g. Tuscany Sunset Prenup" class="w-full bg-stone-50 border border-stone-200 p-3 text-sm text-stone-900 focus:outline-none focus:border-[#9E8873]">
                                     </div>
                                     <div class="space-y-2">
                                         <label class="text-[11px] uppercase tracking-wider text-stone-500 font-medium">Subtitle / Tagline</label>
@@ -437,7 +437,7 @@
         </p>
     </footer>
 
-    <!-- Inline JavaScript Application State -->
+    <!-- Application Script -->
     <script>
         const DEFAULT_ALBUMS = [
             {
@@ -476,9 +476,9 @@
         function photographyApp() {
             return {
                 albums: [],
-                activeTab: 'stories',
+                activeTab: 'stories', // Defaults to Featured Stories homepage
                 selectedCategory: 'All',
-                categories: ['All', 'Weddings', 'Elopements', 'Editorial', 'Portraits'],
+                categories: ['All', 'Weddings', 'Prenup', 'Editorial', 'Portraits'], // Updated category list
                 selectedAlbum: null,
                 lightboxIndex: null,
                 isAdminAuthenticated: false,
